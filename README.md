@@ -1,2 +1,39 @@
-# SGRUnet-pytorch
-unofficial pytorch implementation Anime Sketch Coloring with Swish-Gated Residual U-Net
+# Anime Sketch Coloring with Swish-Gated Residual U-Net
+Pytorch unofficial port of SGRUnet(the official: [here](https://github.com/pradeeplam/Anime-Sketch-Coloring-with-Swish-Gated-Residual-UNet))
+*Still in training, so there is no guarantee of performance.*
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200325151220770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDk3ODQ1,size_16,color_FFFFFF,t_70)
+#### Feature
+
+ - **LayerNorm** requires a lot of memory, so **BatchNorm** was implemented, **which greatly speeds up the training, but may have an impact on performance**. 
+ - Different dataset. [Anime Sketch Colorization Pair](https://www.kaggle.com/ktaebum/anime-sketch-colorization-pair) 
+ - The network that calculates the loss is different(ResNet vs VGG19).
+
+## Setup
+*pytorch >= 1.1.0*
+
+Use the **requirements.txt** file to install the necessary depedencies for this project.
+```
+$ pip install -r requirements.txt
+```
+
+## Config
+Modify ```config.py```as needed.
+
+## Run
+```
+python  main.py
+```
+
+## inference
+Modify the 
+- **model_path**   
+- **file_name**
+- **file_path**
+- **output_path**
+in the ```inference.py```as needed.
+
+and
+```
+python inference.py
+```
