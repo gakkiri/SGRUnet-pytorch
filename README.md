@@ -30,7 +30,8 @@ Modify the
 - **model_path**   
 - **file_name**
 - **file_path**
-- **output_path**
+- **output_path**  
+
 in the ```inference.py```as needed.
 
 and
