@@ -25,7 +25,7 @@ Modify ```config.py```as needed.
 python  main.py
 ```
 
-## inference
+## Inference
 Modify the 
 - **model_path**   
 - **file_name**
