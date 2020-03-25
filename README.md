@@ -20,7 +20,7 @@ $ pip install -r requirements.txt
 ## Config
 Modify ```config.py```as needed.
 
-## Run
+## Train
 ```
 python  main.py
 ```
