@@ -73,7 +73,7 @@ class Trainer(object):
 
             if self.config.val:
                 loss = self.val_one_epoch(epoch)
-                self.write_log(loss, epoch, mode='EVAL')
+                self.write_log(epoch, loss, mode='EVAL')
 
             if epoch % self.config.save_interval == 0:
                 self.save_model(epoch, loss < self.best_loss)
