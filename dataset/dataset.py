@@ -20,7 +20,10 @@ class SketchDataset(data.Dataset):
         self.binary = config.binary
 
     def data_augment(self, img, sketch=None):
-        img, sketch, flip = RandomHorizontalFlip()(img, sketch)
+        if train:
+            img, sketch, flip = RandomHorizontalFlip()(img, sketch)
+        else:
+            flip = False
         img, sketch = self.tsfm(img), self.tsfm(sketch)
         return img, sketch, flip
 
@@ -40,8 +43,5 @@ class SketchDataset(data.Dataset):
 
         img = Image.fromarray(img)
         sketch = Image.fromarray(sketch).convert('L')
-        flip = False
-        if self.train:
-            img, sketch, flip = self.data_augment(img, sketch)
-
+        img, sketch, flip = self.data_augment(img, sketch)
         return img, sketch, flip
