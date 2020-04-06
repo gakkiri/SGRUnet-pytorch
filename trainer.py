@@ -37,7 +37,7 @@ class Trainer(object):
                                                                  verbosity=0)
         self.config = config
         self.logger = self.init_logger()
-        self.logger.info('Trainer build seccess!')
+        self.logger.info('Trainer OK!')
 
     def init_logger(self):
         logger = logging.getLogger()
@@ -114,7 +114,7 @@ class Trainer(object):
                     imgs_bw = imgs_bw.cuda()
 
                 imgs_rgb_gen = self.train_net(imgs_rgb)
-                loss = self.losser(imgs_rgb, imgs_rgb_gen, imgs_bw)
+                loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen)
 
                 total_loss += loss.item()
                 if step % self.config.log_interval == 0:
