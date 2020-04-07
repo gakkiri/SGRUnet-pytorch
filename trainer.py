@@ -90,7 +90,7 @@ class Trainer(object):
             self.optimizer.zero_grad()
 
             imgs_rgb_gen = self.train_net(imgs_bw)
-            loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen)
+            loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen/255.)
 
             if self.config.apex and APEX:
                 with apex.amp.scale_loss(loss, self.optimizer) as scaled_loss:
@@ -114,7 +114,7 @@ class Trainer(object):
                     imgs_bw = imgs_bw.cuda()
 
                 imgs_rgb_gen = self.train_net(imgs_rgb)
-                loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen)
+                loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen/255.)
 
                 total_loss += loss.item()
                 if step % self.config.log_interval == 0:
