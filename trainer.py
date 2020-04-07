@@ -1,9 +1,13 @@
-from model.Dnet import D
 from model.Gnet import SGRU
 from loss import CRNsLoss
-
 import os, logging
 import torch
+
+from config import config
+if config.dnet_slug[0] == 'r':
+    from model.Dnet import ResNet as D
+elif config.dnet_slug[0] == 'v':
+    from model.Dnet import VGG as D
 
 try:
     import apex
@@ -90,7 +94,7 @@ class Trainer(object):
             self.optimizer.zero_grad()
 
             imgs_rgb_gen = self.train_net(imgs_bw)
-            loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen/255.)
+            loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen / 255.)
 
             if self.config.apex and APEX:
                 with apex.amp.scale_loss(loss, self.optimizer) as scaled_loss:
@@ -114,7 +118,7 @@ class Trainer(object):
                     imgs_bw = imgs_bw.cuda()
 
                 imgs_rgb_gen = self.train_net(imgs_rgb)
-                loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen/255.)
+                loss = self.losser(imgs_bw, imgs_rgb, imgs_rgb_gen / 255.)
 
                 total_loss += loss.item()
                 if step % self.config.log_interval == 0:
