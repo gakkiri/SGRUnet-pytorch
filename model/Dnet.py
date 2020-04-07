@@ -87,12 +87,16 @@ class VGG(nn.Module):
 
         if slug == 'v16':
             self.vgg = models.vgg16(pretrained=pretrained)
+            self.feats_idx = [3, 8, 13, 22, 29]
         elif slug == 'v19':
             self.vgg = models.vgg19(pretrained=pretrained)
+            self.feats_idx = [3, 8, 13, 22, 33]
         elif slug == 'v16bn':
             self.vgg = models.vgg16_bn(pretrained=pretrained)
+            self.feats_idx = [5, 12, 19, 30, 42]
         elif slug == 'v19bn':
             self.vgg = models.vgg19_bn(pretrained=pretrained)
+            self.feats_idx = [5, 12, 19, 30, 51]
 
         else:
             assert False, "Bad slug: %s" % slug
@@ -101,6 +105,6 @@ class VGG(nn.Module):
         feats = []
         for step, layer in enumerate(self.vgg.features):
             x = layer(x)
-            if step in [3, 8, 13, 22, 33]:
+            if step in self.feats_idx:
                 feats.append(x.clone())
         return feats
