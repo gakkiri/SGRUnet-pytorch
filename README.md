@@ -7,7 +7,7 @@ Pytorch unofficial port of SGRUnet(the official: [here](https://github.com/prade
 
  - **LayerNorm** requires a lot of memory, so **BatchNorm** was implemented, **which greatly speeds up the training, but may have an impact on performance**. You can choose which to use in ```config.py```.
  - Two datasets are supported. [Anime Sketch Colorization Pair](https://www.kaggle.com/ktaebum/anime-sketch-colorization-pair) and another one that was used in the paper. Also optional in ```config.py```.
- - The network that calculates the loss is different(ResNet vs VGG19). Also optional in ```config.py```.
+ - The network that calculates the loss is different(ResNet family vs VGG family). Also optional in ```config.py```.
  
 ## Data folder
 colorgram  
