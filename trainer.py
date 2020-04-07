@@ -2,12 +2,7 @@ from model.Gnet import SGRU
 from loss import CRNsLoss
 import os, logging
 import torch
-
-from config import config
-if config.dnet_slug[0] == 'r':
-    from model.Dnet import ResNet as D
-elif config.dnet_slug[0] == 'v':
-    from model.Dnet import VGG as D
+from model.Dnet import ResNet, VGG
 
 try:
     import apex
@@ -21,7 +16,10 @@ class Trainer(object):
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.train_net = SGRU()
-        self.loss_net = D(config.dnet_slug)
+        if config.dnet_slug[0] == 'r':
+            self.loss_net = ResNet(config.dnet_slug)
+        else:
+            self.loss_net = VGG(config.dnet_slug)
         self.losser = CRNsLoss(config, self.loss_net)
 
         if config.resume:
