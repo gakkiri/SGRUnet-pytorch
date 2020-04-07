@@ -29,7 +29,7 @@ class Conv3x3(nn.Module):
         return self.block(x)
 
 
-class D(nn.Module):
+class ResNet(nn.Module):
     def __init__(self, slug, pretrained=True):
         super().__init__()
         if not pretrained:
@@ -79,11 +79,28 @@ class D(nn.Module):
         return d_out_1, d_out_2, d_out_3, d_out_4, d_out_5
 
 
-if __name__ == '__main__':
-    d = D(slug='r18').eval()
+class VGG(nn.Module):
+    def __init__(self, slug, pretrained=True):
+        super().__init__()
+        if not pretrained:
+            print("Caution, not loading pretrained weights.")
 
-    x = torch.randn(2, 3, 256, 256)
-    with torch.no_grad():
-        d_outs = d(x)
-    for out in d_outs:
-        print(out.shape)
+        if slug == 'v16':
+            self.vgg = models.vgg16(pretrained=pretrained)
+        elif slug == 'v19':
+            self.vgg = models.vgg19(pretrained=pretrained)
+        elif slug == 'v16bn':
+            self.vgg = models.vgg16_bn(pretrained=pretrained)
+        elif slug == 'v19bn':
+            self.vgg = models.vgg19_bn(pretrained=pretrained)
+
+        else:
+            assert False, "Bad slug: %s" % slug
+
+    def forward(self, x):
+        feats = []
+        for step, layer in enumerate(self.vgg.features):
+            x = layer(x)
+            if step in [3, 8, 13, 22, 33]:
+                feats.append(x.clone())
+        return feats
