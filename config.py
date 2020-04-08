@@ -6,12 +6,12 @@ config.log_dir = './log'
 config.log_interval = 100  # STEP
 
 # data
-config.dataset = 'safebooru'  # OR colorgram
+config.dataset = 'colorgram'  # safebooru OR colorgram
 config.train_data_root = './anime_colorization/data/train/'
 config.val = True
 config.val_data_root = './anime_colorization/data/val/'
 config.binary = False
-config.orig_size = 512
+config.orig_size = 512  # in 'colorgram'
 config.train_size = 256  # or None
 
 # model
@@ -20,8 +20,9 @@ config.gpu = True
 config.resume = False
 config.resume_from_best = False
 config.checkpoint_dir = './checkpoints'
-config.dnet_slug = 'v19'  # OR vgg
-config.bn = True  # batch norm OR layer norm
+config.dnet_slug = 'v19'  # resnet OR vgg
+config.bn = True  # BatchNorm OR LayerNorm
+config.bilinear = True
 
 # loss
 config.loss_weight = [0.88, 0.79, 0.63, 0.51, 0.39, 1.07]
