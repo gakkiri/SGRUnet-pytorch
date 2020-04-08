@@ -10,7 +10,6 @@ else:
 class Conv2DLReLU(nn.Module):
     def __init__(self, inc, outc, kernel_size=3, stride=1, padding=0):
         super().__init__()
-        # NOTE: kernel_size=2, stride=1, and padding='SAME' in the paper code
         self.conv = nn.Conv2d(inc, outc, kernel_size, stride, padding)
         self.ln = Norm(outc)
         self.llr = nn.LeakyReLU(inplace=True)
@@ -22,8 +21,10 @@ class Conv2DLReLU(nn.Module):
 class Conv2DTransposeLReLU(nn.Module):
     def __init__(self, inc, outc):
         super().__init__()
-        # output_size = 2 * input_size
-        self.deconv = nn.ConvTranspose2d(inc, outc, kernel_size=2, stride=2, padding=0)
+        if config.bilinear:
+            self.deconv = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+        else:
+            self.deconv = nn.ConvTranspose2d(inc, outc, kernel_size=2, stride=2, padding=0)
         self.ln = Norm(outc)
         self.llr = nn.LeakyReLU(inplace=True)
 
