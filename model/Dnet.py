@@ -10,23 +10,9 @@ def convert_to_inplace_relu(model):
             m.inplace = True
 
 
-class Conv1x1(nn.Module):
-    def __init__(self, num_in, num_out):
-        super().__init__()
-        self.block = nn.Conv2d(num_in, num_out, kernel_size=1, bias=False)
-
-    def forward(self, x):
-        return self.block(x)
-
-
-class Conv3x3(nn.Module):
-    def __init__(self, num_in, num_out):
-        super().__init__()
-        self.block = nn.Conv2d(num_in, num_out, kernel_size=3, padding=1,
-                               bias=False)
-
-    def forward(self, x):
-        return self.block(x)
+def compute_loss(label, gen, bw, weight):
+    mask = nn.functional.interpolate(bw, size=label.shape[2:])
+    return (weight * torch.mean(mask.squeeze() * torch.mean(torch.abs(label - gen), 1))).unsqueeze(0)
 
 
 class ResNet(nn.Module):
@@ -61,22 +47,25 @@ class ResNet(nn.Module):
         else:
             assert False, "Bad slug: %s" % slug
 
-    def forward(self, x):
-        # Bottom-up pathway, from ResNet
-        size = x.size()
-        assert size[-1] % 32 == 0 and size[-2] % 32 == 0, \
-            "image resolution has to be divisible by 32 for resnet"
+        self.extra = nn.Sequential(
+            self.resnet.conv1,
+            self.resnet.bn1,
+            self.resnet.relu,
+        )
+        self.feat_layers = [self.resnet.maxpool,
+                            self.resnet.layer1,
+                            self.resnet.layer2,
+                            self.resnet.layer3,
+                            self.resnet.layer4]
 
-        x = self.resnet.conv1(x)
-        x = self.resnet.bn1(x)
-        x = self.resnet.relu(x)
-
-        d_out_1 = self.resnet.maxpool(x)
-        d_out_2 = self.resnet.layer1(d_out_1)
-        d_out_3 = self.resnet.layer2(d_out_2)
-        d_out_4 = self.resnet.layer3(d_out_3)
-        d_out_5 = self.resnet.layer4(d_out_4)
-        return d_out_1, d_out_2, d_out_3, d_out_4, d_out_5
+    def forward(self, x1, x2, bw, weigths):
+        loss = compute_loss(x1, x2, bw, weigths[0])
+        x1, x2 = self.extra(x1), self.extra(x2)
+        for i in range(len(self.feat_layers)):
+            x1 = self.feat_layers[i](x1)
+            x2 = self.feat_layers[i](x2)
+            loss += compute_loss(x1, x2, bw, weigths[i+1])
+        return loss
 
 
 class VGG(nn.Module):
@@ -101,10 +90,14 @@ class VGG(nn.Module):
         else:
             assert False, "Bad slug: %s" % slug
 
-    def forward(self, x):
-        feats = []
+    def forward(self, x1, x2, bw, weigths):
+        weight_idx = 0
+        loss = compute_loss(x1, x2, bw, weigths[weight_idx])
+        weight_idx += 1
         for step, layer in enumerate(self.vgg.features):
-            x = layer(x)
+            x1 = layer(x1)
+            x2 = layer(x2)
             if step in self.feats_idx:
-                feats.append(x.clone())
-        return feats
+                loss += compute_loss(x1, x2, bw, weigths[weight_idx])
+                weight_idx += 1
+        return loss
