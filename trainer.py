@@ -60,7 +60,7 @@ class Trainer(object):
     def write_log(self, avg_loss, epoch, step=None, loss=None, mode='TRAIN'):
         log = f'[{mode}]epoch: %3d' % (epoch)
         if step is not None:
-            log += f'  step: %3d/{len(self.train_loader)}' % (step)
+            log += f'  step: %5d/{len(self.train_loader)}' % (step)
         if loss is not None:
             log += f'  loss: %.3f(%.3f)' % (loss, avg_loss)
         else:
@@ -71,7 +71,7 @@ class Trainer(object):
         self.logger.info('Start trainning...\n')
         for epoch in range(self.start_epoch, self.config.epoch + 1):
             loss = self.train_one_epoch(epoch)
-            self.write_log(epoch, loss)
+            self.write_log(loss, epoch)
 
             if self.config.val:
                 loss = self.val_one_epoch(epoch)
