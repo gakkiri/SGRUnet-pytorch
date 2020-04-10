@@ -37,6 +37,11 @@ class Trainer(object):
         if config.apex and APEX:
             self.train_net, self.optimizer = apex.amp.initialize(self.train_net, self.optimizer, opt_level="O1",
                                                                  verbosity=0)
+        if not os.path.exists(config.log_dir):
+            os.makedirs(config.log_dir)
+        if not os.path.exists(config.checkpoint_dir):
+            os.makedirs(config.checkpoint_dir)
+
         self.config = config
         self.logger = self.init_logger()
         self.logger.info('Trainer OK!')

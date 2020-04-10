@@ -33,13 +33,12 @@ class CRNsLoss(nn.Module):
         :param imgs_rgb_gen:  [B, 9, 3, H, W]
         :return:
         '''
-        losses = []  # [B, 9]
+        losses = []
         img_rgb_label_norm = self.normlization(img_rgb_label)
         for i in range(imgs_rgb_gen.shape[1]):
-            img_rgb_gen = self.normlization(imgs_rgb_gen[:, i, ...])  # [B, 3, H, W]
-            losses.append(self.D(img_rgb_label_norm, img_rgb_gen, img_bw, self.weights))  # [1]
-        losses = torch.cat(losses)  # [9]
-        loss_min = torch.min(losses, 0)
-        loss_mean = torch.mean(losses)
-
-        return loss_min[0] * self.alpha + loss_mean * self.beta
+            img_rgb_gen = self.normlization(imgs_rgb_gen[:, i, ...])
+            losses.append(self.D(img_rgb_label_norm, img_rgb_gen, img_bw, self.weights))
+        losses = torch.cat(losses).view(-1, 2).transpose(1, 0)  # [B, 9]
+        loss_min = torch.min(losses, 1)
+        loss_mean = torch.mean(losses, 1)
+        return (loss_min[0] * self.alpha + loss_mean * self.beta).mean()
