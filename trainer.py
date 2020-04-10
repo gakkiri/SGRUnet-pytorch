@@ -128,7 +128,7 @@ class Trainer(object):
             'model': self.train_net.state_dict(),
             'epoch': epoch,
             'optimizer': self.optimizer,
-            'loss': self.best_loss.item()
+            'loss': self.best_loss
         }
         if is_best:
             torch.save(state, os.path.join(self.config.checkpoint_dir, 'best_checkpoint.pth'))
