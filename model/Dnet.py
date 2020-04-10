@@ -10,9 +10,9 @@ def convert_to_inplace_relu(model):
             m.inplace = True
 
 
-def compute_loss(label, gen, bw, weight):
-    mask = nn.functional.interpolate(bw, size=label.shape[2:])
-    return (weight * torch.mean(mask.squeeze() * torch.mean(torch.abs(label - gen), 1))).unsqueeze(0)
+def compute_loss(x1, x2, bw, weight):
+    mask = nn.functional.interpolate(bw, size=x1.shape[2:]).squeeze()
+    return weight * torch.mean(torch.mean(mask * torch.mean(torch.abs(x1 - x2), 1, True), 2), 2)
 
 
 class ResNet(nn.Module):
@@ -90,14 +90,16 @@ class VGG(nn.Module):
         else:
             assert False, "Bad slug: %s" % slug
 
+        self.vgg = self.vgg.features
+
     def forward(self, x1, x2, bw, weigths):
         weight_idx = 0
         loss = compute_loss(x1, x2, bw, weigths[weight_idx])
         weight_idx += 1
-        for step, layer in enumerate(self.vgg.features):
+        for step, layer in enumerate(self.vgg):
             x1 = layer(x1)
             x2 = layer(x2)
             if step in self.feats_idx:
                 loss += compute_loss(x1, x2, bw, weigths[weight_idx])
                 weight_idx += 1
-        return loss
+        return loss  # [B, 1]
