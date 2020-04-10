@@ -14,6 +14,8 @@ class CRNsLoss(nn.Module):
         self.alpha = config.alpha
         self.beta = config.beta
         self.D = Dnet.eval()
+        for p in self.D.parameters():
+            p.requires_grad = False
 
         self.mean = torch.tensor([0.485, 0.456, 0.406]).view(1, 1, 1, 3).float().permute(0, 3, 1, 2)
         self.std = torch.tensor([0.229, 0.224, 0.225]).view(1, 1, 1, 3).float().permute(0, 3, 1, 2)
