@@ -38,7 +38,7 @@ class CRNsLoss(nn.Module):
         for i in range(imgs_rgb_gen.shape[1]):
             img_rgb_gen = self.normlization(imgs_rgb_gen[:, i, ...])
             losses.append(self.D(img_rgb_label_norm, img_rgb_gen, img_bw, self.weights))
-        losses = torch.cat(losses).view(-1, 2).transpose(1, 0)  # [B, 9]
+        losses = torch.cat(losses).view(imgs_rgb_gen.shape[1], -1).transpose(1, 0)  # [B, 9]
         loss_min = torch.min(losses, 1)
         loss_mean = torch.mean(losses, 1)
         return (loss_min[0] * self.alpha + loss_mean * self.beta).mean()
