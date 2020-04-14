@@ -147,6 +147,7 @@ class SGRU(nn.Module):
 
         B, _, H, W = inp.shape
         inp = (inp + 1.0) / 2.0 * 255.0  # [B, 27, H, W]
-        # [B, 27, H, W] -> [B, 9, 3, H, W]
-        output = inp.view(B, -1, 3, H, W)
-        return output
+
+        out16, out17, out18 = torch.chunk(inp.permute(1, 0, 2, 3), 3, 0)
+        out = torch.cat((out16, out17, out18), 1)  # [9, 3, 256, 256], NOTE: batch size = 1
+        return out
