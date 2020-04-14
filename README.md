@@ -1,8 +1,11 @@
 # Anime Sketch Coloring with Swish-Gated Residual U-Net
 Pytorch unofficial port of SGRUnet(the official: [here](https://github.com/pradeeplam/Anime-Sketch-Coloring-with-Swish-Gated-Residual-UNet))
-*Still in training, so there is no guarantee of performance.*
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200325151220770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDk3ODQ1,size_16,color_FFFFFF,t_70)
+
+## performance
+
+
 ## Feature
 
  - **LayerNorm** requires a lot of memory, so **BatchNorm** was implemented, **which greatly speeds up the training, but may have an impact on performance**. You can choose which to use in ```config.py```.
