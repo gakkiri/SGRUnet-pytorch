@@ -8,7 +8,7 @@ This is the performance of training 13 epochs, config is consistent with this ``
 Training this model takes a lot of time, so I only trained 13 epochs, which does not represent the best performance.
 ![在这里插入图片描述](https://raw.githubusercontent.com/gakkiri/SGRUnet-pytorch/master/test/result.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDk3ODQ1,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://raw.githubusercontent.com/gakkiri/SGRUnet-pytorch/master/test/result2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDk3ODQ1,size_16,color_FFFFFF,t_70)
-
+![在这里插入图片描述](https://raw.githubusercontent.com/gakkiri/SGRUnet-pytorch/master/log/log.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDk3ODQ1,size_16,color_FFFFFF,t_70)
 ## Feature
  - **LayerNorm** requires a lot of memory, so **BatchNorm** was implemented, **which greatly speeds up the training, but may have an impact on performance**. You can choose which to use in ```config.py```.
  - For save your memory, you can choose **bilinear** or **transpose convolution**(paper) to upsample.
