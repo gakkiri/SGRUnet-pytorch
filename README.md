@@ -1,7 +1,7 @@
 # Anime Sketch Coloring with Swish-Gated Residual U-Net
 Pytorch unofficial port of SGRUnet(the official: [here](https://github.com/pradeeplam/Anime-Sketch-Coloring-with-Swish-Gated-Residual-UNet))
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200325151220770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDk3ODQ1,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200325151220770.png?x-oss-Process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDk3ODQ1,size_16,color_FFFFFF,t_70)
 
 ## performance
 This is the performance of training 13 epochs, config is consistent with this ```config.py```. [google  drive](https://drive.google.com/file/d/1hvm3ycr3uhaEEeLSQqsBxemsQWoo5XL7/view?usp=sharing)  
