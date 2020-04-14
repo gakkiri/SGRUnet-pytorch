@@ -18,27 +18,33 @@ class CRNsLoss(nn.Module):
             p.requires_grad = False
 
         self.mean = torch.tensor([0.485, 0.456, 0.406]).view(1, 1, 1, 3).float().permute(0, 3, 1, 2)
-        self.std = torch.tensor([0.229, 0.224, 0.225]).view(1, 1, 1, 3).float().permute(0, 3, 1, 2)
+        # self.std = torch.tensor([0.229, 0.224, 0.225]).view(1, 1, 1, 3).float().permute(0, 3, 1, 2)
         if config.gpu:
             self.mean = self.mean.cuda()
-            self.std = self.std.cuda()
+            # self.std = self.std.cuda()
 
     def normlization(self, x):
-        return (x - self.mean) / self.std
+        # return (x - self.mean) / self.std
+        return x - self.mean
 
     def forward(self, img_bw, img_rgb_label, imgs_rgb_gen):
         '''
-        :param img_bw: [B, 1, H, W]
-        :param img_rgb_label: [B, 3, H, W]
-        :param imgs_rgb_gen:  [B, 9, 3, H, W]
+        :param img_bw: [B(1), 1, H, W]
+        :param img_rgb_label: [B(1), 3, H, W]
+        :param imgs_rgb_gen:  ×[B, 9, 3, H, W], [9, 3, H, W]
         :return:
         '''
-        losses = []
+        # losses = []
         img_rgb_label_norm = self.normlization(img_rgb_label)
-        for i in range(imgs_rgb_gen.shape[1]):
-            img_rgb_gen = self.normlization(imgs_rgb_gen[:, i, ...])
-            losses.append(self.D(img_rgb_label_norm, img_rgb_gen, img_bw, self.weights))
-        losses = torch.cat(losses).view(imgs_rgb_gen.shape[1], -1).transpose(1, 0)  # [B, 9]
-        loss_min = torch.min(losses, 1)
-        loss_mean = torch.mean(losses, 1)
-        return (loss_min[0] * self.alpha + loss_mean * self.beta).mean()
+        # for i in range(imgs_rgb_gen.shape[1]):
+        #     img_rgb_gen = self.normlization(imgs_rgb_gen[:, i, ...])
+        #     losses.append(self.D(img_rgb_label_norm, img_rgb_gen, img_bw, self.weights))
+        # losses = torch.cat(losses).view(imgs_rgb_gen.shape[1], -1).transpose(1, 0)  # [B, 9]
+        # loss_min = torch.min(losses, 1)
+        # loss_mean = torch.mean(losses, 1)
+        # return (loss_min[0] * self.alpha + loss_mean * self.beta).mean()
+
+        img_rgb_gen = self.normlization(imgs_rgb_gen)
+        losses = self.D(img_rgb_label_norm, img_rgb_gen, img_bw, self.weights)
+        loss_min = torch.min(losses, 0)
+        return torch.sum(loss_min[0])*self.alpha + torch.sum(torch.mean(losses, 0))*self.beta

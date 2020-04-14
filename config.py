@@ -21,8 +21,8 @@ config.resume = False
 config.resume_from_best = False
 config.checkpoint_dir = './checkpoints'
 config.dnet_slug = 'v19'  # resnet OR vgg
-config.bn = True  # BatchNorm OR LayerNorm
-config.bilinear = True
+config.bn = False  # BatchNorm OR LayerNorm
+config.bilinear = False
 
 # loss
 config.loss_weight = [0.88, 0.79, 0.63, 0.51, 0.39, 1.07]
@@ -31,6 +31,6 @@ config.beta = 0.001
 
 # hyperparameters
 config.epoch = 100
-config.batch_size = 4
+config.batch_size = 1
 config.lr = 1e-4
 config.save_interval = 1  # EPOCH
