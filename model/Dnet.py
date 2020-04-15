@@ -12,7 +12,7 @@ def convert_to_inplace_relu(model):
 
 def compute_loss(x1, x2, bw, weight):
     mask = nn.functional.interpolate(bw, size=x1.shape[2:]).squeeze()
-    return weight * torch.mean(torch.mean(mask * torch.mean(torch.abs(x1 - x2), 1, True), 2), 2)
+    return weight * torch.mean(torch.mean(mask * torch.mean(torch.abs(x1 - x2), 1).unsqueeze(1), 2), 2)
 
 
 class ResNet(nn.Module):
@@ -64,7 +64,7 @@ class ResNet(nn.Module):
         for i in range(len(self.feat_layers)):
             x1 = self.feat_layers[i](x1)
             x2 = self.feat_layers[i](x2)
-            loss += compute_loss(x1, x2, bw, weigths[i+1])
+            loss += compute_loss(x1, x2, bw, weigths[i + 1])
         return loss
 
 
@@ -102,4 +102,4 @@ class VGG(nn.Module):
             if step in self.feats_idx:
                 loss += compute_loss(x1, x2, bw, weigths[weight_idx])
                 weight_idx += 1
-        return loss  # [B, 1]
+        return loss  # [9, 1]
