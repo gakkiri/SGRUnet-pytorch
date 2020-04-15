@@ -1,5 +1,4 @@
-torch==1.2.0+cu92
-torchvision==0.4.1
+torchvision>=0.3.1
 timm==0.1.14
 easydict==1.9
 Pillow==6.2.2
