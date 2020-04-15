@@ -14,7 +14,7 @@ Training this model takes a lot of time, so I only trained 13 epochs, which does
  - For save your memory, you can choose **bilinear** or **transpose convolution**(paper) to upsample.
  - Two datasets are supported. [Anime Sketch Colorization Pair](https://www.kaggle.com/ktaebum/anime-sketch-colorization-pair) and another one that was used in the paper. Also optional in ```config.py```.
  - The network that calculates the loss is different(**ResNet family** vs **VGG family**). Also optional in ```config.py```.
- - Support mini-batch training. (BUT DON'T DO IT, There are some bugs that haven't been addressed yet)
+ - Support mini-batch training.
  
 ## Data folder
 colorgram  
