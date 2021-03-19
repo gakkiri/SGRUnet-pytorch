@@ -1,4 +1,4 @@
 torchvision>=0.3.1
 timm==0.1.14
 easydict==1.9
-Pillow==6.2.2
+Pillow==8.1.1
